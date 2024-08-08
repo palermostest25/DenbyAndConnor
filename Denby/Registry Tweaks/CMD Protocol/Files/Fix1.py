@@ -1,0 +1,72 @@
+import os
+import sys
+os.system("title Command Prompt")
+if len(sys.argv) > 1:
+    var = (sys.argv[1])
+else:
+    print("Error.\nsys.argv[1] not defined.\nThe program has been run with a double click and not through the protocol.")
+    os.system("echo Press any key to exit... && pause > nul && exit")
+var2 = (var[0:-1])
+var = (var[6:])
+if var == "/":
+    var50 = (f"@echo off && cd %userprofile%\Desktop && title Command Prompt && cmd")
+    print("Argument passed to the command prompt:")
+    print("cmd:///")
+    os.system("echo.")
+    print("Converted argument:")
+    print("cmd")
+    os.system("echo.")
+    os.system("title Command Prompt")
+    confirm = input("Confirm Passthrough?(Y/N)- ")
+    if confirm == "n":
+        os.system("echo Press any key to exit && pause > nul")
+        exit()
+    if confirm == "N":
+        os.system("echo Press any key to exit && pause > nul")
+        exit()
+    if confirm == "2":
+        os.system("echo Press any key to exit && pause > nul")
+        exit()
+    print("Running: cmd")
+    os.system("cd %userprofile% && cd C:\Windows\System32 && cmd")
+    exit()
+var1 = var[-1]
+if var1 == "/":
+    var = (var[0:-1])
+var = (var).replace ("%20", " ")
+var = (var).replace ("%5C", "\\")
+var = (var).replace ("%22", '"')
+var = (var).replace ("%25", '%')
+var = (var).replace ("%3C", '<')
+var = (var).replace ("%3E", '>')
+var = (var).replace ("%23", '#')
+var = (var).replace ("%7C", '|')
+var = (var).replace ("%7B", '{')
+var = (var).replace ("%7D", '}')
+var = (var).replace ("%5E", '^')
+var = (var).replace ("%7E", '~')
+var = (var).replace ("%5B", '[')
+var = (var).replace ("%5D", ']')
+var = (var).replace ("%60", '`')
+var50 = (f"@echo off && cd %userprofile%\Desktop && title Command Prompt && {var} && cmd")
+print("Argument passed to the command prompt:")
+print(var2)
+os.system("echo.")
+print("Converted argument:")
+print(var)
+os.system("echo.")
+os.system("title Command Prompt")
+confirm = input("Confirm Passthrough?(Y/N)- ")
+if confirm == "n":
+    os.system("echo Press any key to exit && pause > nul")
+    exit()
+if confirm == "N":
+    os.system("echo Press any key to exit && pause > nul")
+    exit()
+if confirm == "2":
+    os.system("echo Press any key to exit && pause > nul")
+    exit()
+print("Running:", var)
+os.system(f"cd %userprofile%\Desktop && {var}")
+os.system("cd %userprofile% && cd C:\Windows\System32 && cmd")
+exit()
