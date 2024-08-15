@@ -62,6 +62,7 @@ async def set_temp_y_cords():
 
 # A set to keep track of connected clients
 connected_clients = set()
+busy_clients = set()
 
 async def echo(websocket, path):
     global current_rain
@@ -95,16 +96,21 @@ async def echo(websocket, path):
                 getting_data = False
             try:
                 if message == "rain_y_cords":
+                    busy_clients.add(websocket)
                     for item in rain_y_cords:
                         await websocket.send(str(item))
+                    busy_clients.remove(websocket)
                 elif message == "temp_y_cords":
+                    busy_clients.add(websocket)
                     for item in temp_y_cords:
                         await websocket.send(str(item))
+                    busy_clients.remove(websocket)
             except ValueError:
                 print("Error")
             else:
-                tasks = [client.send(message) for client in connected_clients]
-                await asyncio.gather(*tasks)
+                for client in connected_clients:
+                    if not client in busy_clients:
+                        await client.send(message)
     except websockets.ConnectionClosed:
         print("Connection was closed.")
     except Exception as e:
