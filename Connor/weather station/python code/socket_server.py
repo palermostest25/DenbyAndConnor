@@ -1,6 +1,7 @@
 import asyncio
 import websockets
 import datetime
+import ssl
 
 # List of 480 items
 rain_y_cords = [f"0" for _ in range(480)]
@@ -117,8 +118,13 @@ async def echo(websocket, path):
         # Unregister the client
         connected_clients.remove(websocket)
 async def server():
-    start_server = await websockets.serve(echo, "0.0.0.0", 8765)
-    print("Server started...")
+    # Define the paths to your SSL certificate and key files
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ssl_context.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
+
+    # Start the WebSocket server with SSL/TLS
+    start_server = await websockets.serve(echo, "0.0.0.0", 8765, ssl=ssl_context)
+    print("Server started with SSL...")
     await start_server.wait_closed()
 
 async def main():
