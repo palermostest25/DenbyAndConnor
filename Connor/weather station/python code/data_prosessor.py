@@ -1,7 +1,6 @@
 import re 
 import asyncio
 import websockets
-import ssl
 
 async def send_data(H, T, P, W, D, R, B, uri):
     async with websockets.connect(uri) as websocket:
@@ -17,10 +16,8 @@ async def send_data(H, T, P, W, D, R, B, uri):
         while not await websocket.recv() == "end":
             pass
 async def receive_data(uri):
-    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-    ssl_context.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
     try:
-        async with websockets.connect(uri, ssl=ssl_context) as websocket:
+        async with websockets.connect(uri) as websocket:
             while True:
                 try:
                     # Wait for a message with a timeout
