@@ -104,8 +104,11 @@ async def main():
             working_input_voltage = working_input_voltage.split("=")
             working_input_voltage = working_input_voltage[1]
             print(f"Working input voltage = {working_input_voltage}V")
-            await receive_data(uri)
-            await send_data(working_humidity, working_temp, working_pressure, working_w_spd, working_w_dir, working_rain, working_input_voltage, uri)
+            try:
+                await receive_data(uri)
+                await send_data(working_humidity, working_temp, working_pressure, working_w_spd, working_w_dir, working_rain, working_input_voltage, uri)
+            except Exception as e:
+                print("Error while connecting to websocket")
         else:
             print("Not enough data")
 asyncio.run(main())
