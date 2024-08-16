@@ -37,7 +37,7 @@ void setup() {
   waterproof_sensors.begin();
 
   transceiver.begin();
-  transceiver.setPALevel(RF24_PA_HIGH);
+  transceiver.setPALevel(RF24_PA_LOW);
   transceiver.openWritingPipe(address);
   transceiver.openReadingPipe(1, address); // Open another pipe for receiving
   transceiver.startListening(); // Start listening for incoming data
@@ -64,10 +64,10 @@ void loop() {
     }
   }
 
-  // Send data every 2 seconds
-  if (millis() - ms_counter >= 2000) {
+  // Send data every 10 seconds
+  if (millis() - ms_counter >= 10000) {
     digitalWrite(status_led_1, HIGH);
-    ms_counter += 2000;
+    ms_counter += 10000;
 
     doweathercalc();
     digitalWrite(status_led_1, LOW);
