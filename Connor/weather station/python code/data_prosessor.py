@@ -36,7 +36,7 @@ async def receive_data(uri):
         print(f"An error occurred: {e}")
 
 async def main():
-    uri = "ws://weatherstationserver.moahub.org:8765/"
+    uri = "wss://weatherstationserver.moahub.org/"
     while True:
         working_data = input("Input working data: ")
         if len(working_data) > 40:
