@@ -12,7 +12,7 @@ void setup() {
   Serial.begin(9600);
   reset = true;
   transceiver.begin();
-  transceiver.setPALevel(RF24_PA_HIGH);
+  transceiver.setPALevel(RF24_PA_LOW);
 
   // Setup for sending and receiving
   transceiver.openWritingPipe(address); // Set address for sending
