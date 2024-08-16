@@ -17,10 +17,10 @@ def read_and_write_to_serial(port='/dev/ttyACM0', baudrate=9600, timeout=1, comm
                 return data
             else:
                 return None
+        ser.close()
     except serial.SerialException as e:
         print(f"Serial error: {e}")
         return None
-    finally:
         ser.close()
 
 async def send_data(H, T, P, W, D, R, B, uri):
