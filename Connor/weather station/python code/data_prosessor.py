@@ -1,6 +1,26 @@
 import re 
 import asyncio
 import websockets
+import serial
+
+def read_and_write_to_serial(port='/dev/ttyACM0', baudrate=9600, timeout=1, command=None):
+    try:
+        # Open the serial port
+        ser = serial.Serial(port, baudrate, timeout=timeout)
+            # Read data from the serial port
+        if command:
+            ser.write((command + "\n").encode('utf-8'))
+        else:
+            if ser.in_waiting > 0:
+                data = ser.readline().decode('utf-8').rstrip()
+                return data
+            else:
+                return None
+    except serial.SerialException as e:
+        print(f"Serial error: {e}")
+        return None
+    finally:
+        ser.close()
 
 async def send_data(H, T, P, W, D, R, B, uri):
     async with websockets.connect(uri) as websocket:
@@ -23,7 +43,7 @@ async def receive_data(uri):
                     # Wait for a message with a timeout
                     response = await asyncio.wait_for(websocket.recv(), timeout=1.0)  # 1 second timeout
                     if response == "r":
-                        print("Reset Arduino")
+                        read_and_write_to_serial(command='r')
                         break
                 except asyncio.TimeoutError:
                     # Handle the timeout case (e.g., periodic check or log)
@@ -38,7 +58,7 @@ async def receive_data(uri):
 async def main():
     uri = "wss://weatherstationserver.moahub.org/"
     while True:
-        working_data = input("Input working data: ")
+        working_data = read_and_write_to_serial()
         if len(working_data) > 40:
             working_humidity = re.search(r"H=\d{1,3}\.\d", working_data)
             working_humidity = working_humidity.group()
