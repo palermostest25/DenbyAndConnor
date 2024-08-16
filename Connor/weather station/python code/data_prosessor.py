@@ -2,6 +2,7 @@ import re
 import asyncio
 import websockets
 import serial
+import time
 
 def read_and_write_to_serial(port='/dev/ttyACM0', baudrate=9600, timeout=1, command=None):
     try:
@@ -58,6 +59,8 @@ async def receive_data(uri):
 async def main():
     uri = "wss://weatherstationserver.moahub.org/"
     while True:
+        while read_and_write_to_serial() == None:
+            time.sleep(0.1)
         working_data = read_and_write_to_serial()
         if len(working_data) > 40:
             working_humidity = re.search(r"H=\d{1,3}\.\d", working_data)
