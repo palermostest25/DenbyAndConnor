@@ -20,18 +20,15 @@ def write_to_serial(ser, command):
         print(f"Serial error: {e}")
 
 async def send_data(H, T, P, W, D, R, B, websocket):
-    try:
-        await websocket.send("start")
-        await websocket.send(H)
-        await websocket.send(T)
-        await websocket.send(P)
-        await websocket.send(W)
-        await websocket.send(D)
-        await websocket.send(R)
-        await websocket.send(B)
-        await websocket.send("end")
-    except websockets.ConnectionClosed as e:
-        print("WebSocket connection closed:", e)
+    await websocket.send("start")
+    await websocket.send(H)
+    await websocket.send(T)
+    await websocket.send(P)
+    await websocket.send(W)
+    await websocket.send(D)
+    await websocket.send(R)
+    await websocket.send(B)
+    await websocket.send("end")
 
 async def receive_data(websocket, ser):
     try:
@@ -40,8 +37,6 @@ async def receive_data(websocket, ser):
             write_to_serial(ser, 'r')
     except asyncio.TimeoutError:
         print("No data received")
-    except websockets.ConnectionClosed as e:
-        print("WebSocket connection closed:", e)
 
 async def main():
     uri = "wss://weatherstationserver.moahub.org/"
