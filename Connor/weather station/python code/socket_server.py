@@ -86,10 +86,12 @@ async def echo(websocket, path):
                 getting_data = False
             try:
                 if message == "rain_y_cords":
+                    print(rain_y_cords)
                     busy_clients.add(websocket)
                     for item in rain_y_cords:
                         await websocket.send(str(item))
                 elif message == "temp_y_cords":
+                    print(temp_y_cords)
                     for item in temp_y_cords:
                         await websocket.send(str(item))
                     busy_clients.remove(websocket)
