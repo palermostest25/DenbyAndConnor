@@ -1,0 +1,4 @@
+notes:
+modify gpts rain forcaster to look for patterns in mabe pressure and mabe temp
+modify gpts temp forcaster to not only use pressure difference calculator for prediction and also make it look 
+for what time the temp gose up and down during the week or 2 or 3/month
