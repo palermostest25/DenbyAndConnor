@@ -30,8 +30,7 @@ async def check_date_change():
 async def set_y_cords(y_cords, current_value):
     # Calculate the elapsed time since the start of the day
     now = datetime.datetime.now()
-    start_of_day = datetime.datetime.combine(now.date(), datetime.time.min)
-    elapsed_time = (now - start_of_day).total_seconds()
+    elapsed_time = (now.hour * 3600) + (now.minute * 60) + now.second
     
     # Determine the starting index
     index = int(round(((elapsed_time / seconds_in_day) * 480)))
