@@ -6,6 +6,7 @@ import datetime
 rain_y_cords = [f"0" for _ in range(480)]
 temp_y_cords = [f"0" for _ in range(480)]
 seconds_in_day = 24 * 60 * 60  # Total seconds in a day
+interval = seconds_in_day / len(rain_y_cords)  # Interval between setting each item
 current_rain = 0
 current_temp = 0
 getting_data = False
@@ -28,18 +29,26 @@ async def check_date_change():
             await asyncio.gather(*tasks)
 
 async def set_y_cords(y_cords, current_value):
+    global interval
+    start_time = datetime.datetime.now()
     # Calculate the elapsed time since the start of the day
     now = datetime.datetime.now()
     start_of_day = datetime.datetime.combine(now.date(), datetime.time.min)
     elapsed_time = (now - start_of_day).total_seconds()
     
     # Determine the starting index
-    index = int(round(((elapsed_time / seconds_in_day) * 480)))
-    if index >= len(y_cords):
-        index = len(y_cords)
+    start_index = int(elapsed_time // interval)
+    if start_index >= len(y_cords):
+        start_index = len(y_cords) - 1
     
     # Set items from the starting index
-    y_cords[index] = current_value
+    for i in range(start_index, start_index + 1, len(y_cords)):
+        # Calculate when to set the next item
+        target_time = start_time + datetime.timedelta(seconds=(i - start_index) * interval)
+        time_to_wait = (target_time - datetime.datetime.now()).total_seconds()
+        if time_to_wait > 0:
+            await asyncio.sleep(time_to_wait)  # Wait until it's time to set the item
+        y_cords[i] = current_value
 
 async def set_rain_y_cords():
     global current_rain
