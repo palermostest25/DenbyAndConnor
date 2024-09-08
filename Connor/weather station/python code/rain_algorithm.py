@@ -22,7 +22,6 @@ class Algorithm:
             raise TypeError("hectopascals and average_hectopascals must be ValParser instances")
 
     def __func_called__(self):
-        print(self.hectopascals.value)
         if len(self.rain_days) < 28:
             raise ValueError("rain_days must be at least 28 items long")
         for i in self.rain_days:
