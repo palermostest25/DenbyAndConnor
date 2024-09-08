@@ -82,8 +82,3 @@ class Algorithm:
         seven_day_forecast[0] = round(seven_day_forecast[0] + (seven_day_forecast[0] * (float("0." + f"{round((self.average_hectopascals.value - self.hectopascals.value) / 3)}"))))
         return seven_day_forecast
 
-hpa = ValParser()
-avg_hpa = ValParser(1015)
-test = Algorithm([random.randint(0,1) for _ in range(35)], hpa, avg_hpa)
-hpa.value = 950
-print(test.calc_rain_forecast(test.calc_pattern_to_use(test.calc_pattern_scores())))
