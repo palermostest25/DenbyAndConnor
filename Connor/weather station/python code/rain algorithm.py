@@ -8,10 +8,18 @@ def func_called(decorated_func):
         return decorated_func(self, *args, **kwargs)
     return wrapper
 
+class ValParser:
+    def __init__(self, value=0):
+        self.value = value
+
 class Algorithm:
-    def __init__(self, rain_days:list, hectopascals:int):
+    def __init__(self, rain_days:list, hectopascals:ValParser, average_hectopascals:ValParser):
         self.rain_days = rain_days
-        self.hectopascals = hectopascals
+        try:
+            self.hectopascals = hectopascals.value
+            self.average_hectopascals = average_hectopascals.value
+        except AttributeError:
+            raise TypeError("hectopascals and average_hectopascals must be ValParser instances")
 
     def __func_called__(self):
         if len(self.rain_days) < 28:
@@ -21,6 +29,8 @@ class Algorithm:
                 raise ValueError(f"all items in rain_days must be either 1 or 0. {i} is not 1 or 0. list:\n{self.rain_days}")
         if len(self.rain_days) % 7 != 0:
             raise ValueError(f"rain_days size must be a multable of 7. {len(self.rain_days)} is not a multable of 7")
+        if not isinstance(self.hectopascals, ValParser) or not isinstance(self.average_hectopascals, ValParser):
+            raise TypeError("hectopascals and average_hectopascals must be ValParser instances")
         
             
     @func_called
@@ -68,7 +78,11 @@ class Algorithm:
                 seven_day_forecast[index] = round(seven_day_forecast[index] + seven_day_forecast[index] * 0.15)
             elif value == 0:
                 seven_day_forecast[index] = round(seven_day_forecast[index] - seven_day_forecast[index] * 0.15)
+        seven_day_forecast[0] = round(seven_day_forecast[0] + (seven_day_forecast[0] * (float("0." + f"{self.average_hectopascals - self.hectopascals}"))))
         return seven_day_forecast
 
-test = Algorithm([random.randint(0,1) for _ in range(35)])
+hpa = ValParser()
+avg_hpa = ValParser(1015)
+test = Algorithm([random.randint(0,1) for _ in range(35)], hpa, avg_hpa)
+hpa = 800
 print(test.calc_rain_forecast(test.calc_pattern_to_use(test.calc_pattern_scores())))
