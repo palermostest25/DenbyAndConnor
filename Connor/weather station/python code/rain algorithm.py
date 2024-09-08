@@ -13,15 +13,16 @@ class ValParser:
         self.value = value
 
 class Algorithm:
-    def __init__(self, rain_days:list, hectopascals:ValParser, average_hectopascals:ValParser):
+    def __init__(self, rain_days:list, hectopascals_parser:ValParser, average_hectopascals_parser:ValParser):
         self.rain_days = rain_days
         try:
-            self.hectopascals = hectopascals.value
-            self.average_hectopascals = average_hectopascals.value
+            self.hectopascals = hectopascals_parser
+            self.average_hectopascals = average_hectopascals_parser
         except AttributeError:
             raise TypeError("hectopascals and average_hectopascals must be ValParser instances")
 
     def __func_called__(self):
+        print(self.hectopascals.value)
         if len(self.rain_days) < 28:
             raise ValueError("rain_days must be at least 28 items long")
         for i in self.rain_days:
@@ -78,11 +79,11 @@ class Algorithm:
                 seven_day_forecast[index] = round(seven_day_forecast[index] + seven_day_forecast[index] * 0.15)
             elif value == 0:
                 seven_day_forecast[index] = round(seven_day_forecast[index] - seven_day_forecast[index] * 0.15)
-        seven_day_forecast[0] = round(seven_day_forecast[0] + (seven_day_forecast[0] * (float("0." + f"{self.average_hectopascals - self.hectopascals}"))))
+        seven_day_forecast[0] = round(seven_day_forecast[0] + (seven_day_forecast[0] * (float("0." + f"{round((self.average_hectopascals.value - self.hectopascals.value) / 3)}"))))
         return seven_day_forecast
 
 hpa = ValParser()
 avg_hpa = ValParser(1015)
 test = Algorithm([random.randint(0,1) for _ in range(35)], hpa, avg_hpa)
-hpa = 800
+hpa.value = 950
 print(test.calc_rain_forecast(test.calc_pattern_to_use(test.calc_pattern_scores())))
