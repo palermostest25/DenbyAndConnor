@@ -13,11 +13,11 @@ class ValParser:
         self.value = value
 
 class Algorithm:
-    def __init__(self, rain_days:list, hectopascals_parser:ValParser, average_hectopascals_parser:ValParser):
+    def __init__(self, rain_days:list, hectopascals:ValParser, average_hectopascals:ValParser):
         self.rain_days = rain_days
         try:
-            self.hectopascals = hectopascals_parser
-            self.average_hectopascals = average_hectopascals_parser
+            self.hectopascals = hectopascals
+            self.average_hectopascals = average_hectopascals
         except AttributeError:
             raise TypeError("hectopascals and average_hectopascals must be ValParser instances")
 
